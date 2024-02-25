@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Frontend.Models.Profesor>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Profesores</h1>
+
+<p>
+    <a asp-action="Create">Crear Profesor</a>
+</p>
+<div class="card-deck">
+
+    @foreach (var item in Model) {
+        <div class="card d-inline-flex bg-light text-center" style="width:20rem;">
+            <div class="card-header">
+                <h3>@item.Nombre</h3>
+            </div>
+            <div class="card-body">
+                <div class="card-text">
+                    @item.Nombre @item.Apellidos
+                </div>
+                <br />
+                <div class="btn-group">
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.ID">Editar</a>
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.ID">Detalles</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID">Eliminar</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

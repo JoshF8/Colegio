@@ -41,7 +41,6 @@ IF @@ERROR > 0 BEGIN
 END;
 COMMIT TRANSACTION;
 
-
 CREATE PROCEDURE GetAllAlumnos
 AS
 begin
@@ -66,7 +65,9 @@ CREATE PROCEDURE DeleteAlumno
 @ID int
 AS
 BEGIN
+	DELETE from AlumnoGrado Where AlumnoID = @ID;
 	Delete from Alumno Where ID = @ID;
+	
 END;
 
 CREATE PROCEDURE EditAlumno
@@ -102,11 +103,13 @@ CREATE PROCEDURE DeleteProfesor
 @ID int
 AS
 BEGIN
+	DELETE FROM Grado WHERE ProfesorID = @ID;
 	Delete from Profesor Where ID = @ID;
+	
 END;
 
 CREATE PROCEDURE EditProfesor
-@ID int, @Nombre VARCHAR(100), @Apellidos VARCHAR(100), @Genero VARCHAR(20), @FechaNacimiento DateTime
+@ID int, @Nombre VARCHAR(100), @Apellidos VARCHAR(100), @Genero VARCHAR(20)
 AS
 BEGIN
 	Update Profesor SET Nombre = @Nombre, Apellidos = @Apellidos, Genero = @Genero WHERE ID = @ID
@@ -115,7 +118,7 @@ END;
 CREATE PROCEDURE GetAllGrados
 AS
 begin
-	Select g.*, p.Nombre as ProfesorNombre from Grado as g
+	Select g.*, CONCAT(p.Nombre, ' ', p.Apellidos) as ProfesorNombre from Grado as g
 	inner join Profesor as p on g.ProfesorID = p.ID
 	end
 
@@ -130,7 +133,7 @@ CREATE PROCEDURE GetGrado
 @ID int
 AS
 BEGIN
-	Select g.*, p.Nombre as ProfesorNombre from Grado as g
+	Select g.*, CONCAT(p.Nombre, ' ', p.Apellidos) as ProfesorNombre from Grado as g
 	inner join Profesor as p on g.ProfesorID = p.ID
 	Where g.ID = @ID;
 END;
@@ -139,6 +142,7 @@ CREATE PROCEDURE DeleteGrado
 @ID int
 AS
 BEGIN
+	DELETE FROM AlumnoGrado  WHERE GradoID = @ID;
 	Delete from Grado Where ID = @ID;
 END;
 
@@ -152,7 +156,7 @@ END;
 CREATE PROCEDURE GetAllAlumnoGrados
 AS
 begin
-	Select ag.*, a.Nombre as AlumnoNombre, g.Nombre as GradoNombre from AlumnoGrado as ag
+	Select ag.*, CONCAT(a.Nombre, ' ', a.Apellidos) as AlumnoNombre, g.Nombre as GradoNombre from AlumnoGrado as ag
 	inner join Alumno as a on ag.AlumnoID = a.ID
 	inner join Grado as g on ag.GradoID = g.ID
 	end
@@ -164,11 +168,12 @@ BEGIN
 	Insert into AlumnoGrado (AlumnoID, GradoID, Seccion) VALUES (@AlumnoID, @GradoID, @Seccion);
 END;
 
+
 CREATE PROCEDURE GetAlumnoGrado
 @ID int
 AS
 BEGIN
-	Select ag.*, a.Nombre as AlumnoNombre, g.Nombre as GradoNombre from AlumnoGrado as ag
+	Select ag.*, CONCAT(a.Nombre, ' ', a.Apellidos) as AlumnoNombre, g.Nombre as GradoNombre from AlumnoGrado as ag
 	inner join Alumno as a on ag.AlumnoID = a.ID
 	inner join Grado as g on ag.GradoID = g.ID
 	Where ag.ID = @ID;

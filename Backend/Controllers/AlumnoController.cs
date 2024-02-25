@@ -71,6 +71,7 @@ namespace Backend.Controllers {
                     return new ObjectResult("No se puede eliminar alumno no existente") { StatusCode = 400 };
                 }
                 _context.DeleteAlumno(id);
+                
                 return new ObjectResult("Alumno eliminado exitosamente") { StatusCode = 200 };
             } catch (Exception) {
                 return new ObjectResult("Internal Server Error") { StatusCode = 500 };
